@@ -1,216 +1,289 @@
-
-:root {
-  color-scheme: dark;
-  font-family: system-ui, Arial, sans-serif;
-  background: #090d1b;
-  color: #f5f7ff;
-  --panel: #131b30;
-  --border: #283653;
-  --accent: #7c6cff;
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
 }
 
-* { box-sizing: border-box; }
-
-body {
-  margin: 0;
-  min-height: 100vh;
-  background:
-    radial-gradient(ellipse at top, #1a2450 0, #090d1b 65%);
+body, html {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: #0b0e14;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #ffffff;
+    touch-action: none;
 }
 
-button, input, select { font: inherit; }
-button { cursor: pointer; touch-action: manipulation; }
-
-.app {
-  width: min(100% - 24px, 850px);
-  margin: auto;
-  padding: 18px 0 12px;
+.screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.topbar, .lobby-heading, .game-info {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
+.hidden {
+    display: none !important;
 }
 
-.logo {
-  font-size: 19px;
-  font-weight: 900;
-  letter-spacing: 1px;
+/* Ana Menü */
+#main-menu {
+    background: radial-gradient(circle at center, #1b2838 0%, #0b0e14 100%);
+    flex-direction: column;
 }
 
-.status {
-  font-size: 12px;
-  color: #a9b7d8;
-  text-align: right;
+.menu-content {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 90%;
+    max-width: 400px;
+    padding: 30px;
+    background: rgba(15, 22, 36, 0.85);
+    border: 2px solid #2a3b55;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
 }
 
-.panel {
-  margin: 35px auto 22px;
-  padding: 24px;
-  max-width: 460px;
-  background: #131b30ee;
-  border: 1px solid var(--border);
-  border-radius: 22px;
-  box-shadow: 0 20px 70px #0005;
+.game-title {
+    font-size: 2.2rem;
+    color: #00ffcc;
+    letter-spacing: 2px;
+    text-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
 }
 
-h1 { margin: 0 0 8px; font-size: 30px; }
-h2 { margin: 0 0 6px; font-size: 23px; }
-p { line-height: 1.5; }
-.muted, .hint { color: #9baac8; font-size: 13px; }
-label { display: block; margin: 18px 0 7px; font-size: 13px; }
-
-input, select {
-  display: block;
-  width: 100%;
-  padding: 13px;
-  color: white;
-  background: #0b1224;
-  border: 1px solid #344363;
-  border-radius: 11px;
-  outline: none;
+.game-subtitle {
+    font-size: 0.95rem;
+    color: #8fa3bf;
+    margin-top: -10px;
 }
 
-input:focus, select:focus { border-color: var(--accent); }
-
-button {
-  border: 0;
-  border-radius: 11px;
-  padding: 13px;
-  color: white;
-  font-weight: 750;
+.menu-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 15px;
 }
 
-.primary {
-  width: 100%;
-  margin-top: 16px;
-  background: linear-gradient(110deg, #7364ff, #a05aff);
+.btn {
+    padding: 14px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.1s, filter 0.1s;
 }
 
-.secondary {
-  width: 100%;
-  background: #25324f;
-  border: 1px solid #394b70;
+.btn:active {
+    transform: scale(0.96);
 }
 
-button:disabled { opacity: .45; cursor: not-allowed; }
-button:active { transform: scale(.98); }
-
-.separator {
-  margin: 19px 0;
-  color: #8291b1;
-  text-align: center;
-  font-size: 12px;
+.btn.primary {
+    background-color: #00ffcc;
+    color: #0b0e14;
+    box-shadow: 0 4px 15px rgba(0, 255, 204, 0.3);
 }
 
-.message { min-height: 20px; font-size: 13px; color: #ffd16d; }
-.hidden { display: none !important; }
-
-.small-button {
-  padding: 9px 12px;
-  background: #273450;
-  font-size: 12px;
+.btn.secondary {
+    background-color: #2a3b55;
+    color: #ffffff;
 }
 
-.room-code-box {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin: 20px 0;
-  padding: 15px;
-  border: 1px dashed #7e72ff;
-  border-radius: 13px;
-  background: #0b1224;
+.version-tag {
+    font-size: 0.8rem;
+    color: #576d8c;
+    margin-top: 10px;
 }
 
-#displayCode {
-  font-size: 27px;
-  font-weight: 900;
-  letter-spacing: 5px;
+/* Modallar */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
 }
 
-.player-list { display: grid; gap: 8px; }
-
-.player-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 11px;
-  border: 1px solid #293755;
-  border-radius: 10px;
-  background: #0c1428;
+.modal-content {
+    background: #131c2b;
+    padding: 25px;
+    border-radius: 12px;
+    border: 2px solid #3a5075;
+    width: 85%;
+    max-width: 450px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
 }
 
-.player-dot {
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
+.setting-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1rem;
 }
 
-.player-row .muted { margin-left: auto; }
-
-.game-area {
-  margin-top: 22px;
-  padding: 12px;
-  background: #111a2c;
-  border: 1px solid var(--border);
-  border-radius: 17px;
+.setting-item input, .setting-item select {
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid #3a5075;
+    background: #0b0e14;
+    color: white;
+    font-size: 1rem;
+    width: 60%;
 }
 
-.game-info { margin-bottom: 12px; font-size: 12px; }
-
-.canvas-wrap {
-  overflow: hidden;
-  border: 1px solid #344363;
-  border-radius: 12px;
-  background: #090f1e;
+/* Oyun Alanı */
+#game-container {
+    background-color: #000000;
 }
 
-canvas {
-  display: block;
-  width: 100%;
-  height: auto;
-  touch-action: none;
+#game-canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
 }
 
-.mobile-controls {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  margin-top: 14px;
-  user-select: none;
+/* HUD ve Bilgi Çubuğu */
+#hud-bar {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    right: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    pointer-events: none;
+    z-index: 10;
 }
 
-.mobile-controls button {
-  width: 65px;
-  height: 53px;
-  padding: 0;
-  background: #293755;
-  border: 1px solid #42547b;
-  font-size: 20px;
+#task-progress-container {
+    background: rgba(15, 22, 36, 0.8);
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid #2a3b55;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
 }
 
-.horizontal-controls {
-  display: flex;
-  gap: 7px;
+#progress-bar-bg {
+    width: 100px;
+    height: 10px;
+    background: #0b0e14;
+    border-radius: 5px;
+    overflow: hidden;
+    border: 1px solid #3a5075;
 }
 
-.mobile-controls button.pressed { background: #7161ec; }
-
-.hint { text-align: center; }
-footer { padding: 18px 0; text-align: center; color: #6f7e9d; font-size: 11px; }
-
-@media (min-width: 700px) {
-  .mobile-controls { display: none; }
-  .game-area { padding: 18px; }
+#progress-bar-fill {
+    width: 0%;
+    height: 100%;
+    background: #00ffcc;
+    transition: width 0.3s;
 }
 
-@media (max-width: 420px) {
-  .app { width: min(100% - 16px, 850px); }
-  .panel { padding: 18px; }
-  h1 { font-size: 25px; }
-  .game-info { flex-wrap: wrap; }
+#player-hud-name {
+    background: rgba(15, 22, 36, 0.8);
+    padding: 8px 15px;
+    border-radius: 8px;
+    border: 1px solid #2a3b55;
+    font-weight: bold;
+    font-size: 0.95rem;
+}
+
+/* Sanal Joystick (Sol Alt) */
+#joystick-base {
+    position: absolute;
+    bottom: 30px;
+    left: 30px;
+    width: 120px;
+    height: 120px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    touch-action: none;
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#joystick-stick {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    background: rgba(0, 255, 204, 0.5);
+    border: 2px solid #00ffcc;
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+/* Sağ Alt Eylem Butonları */
+#action-buttons {
+    position: absolute;
+    bottom: 30px;
+    right: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 10;
+}
+
+.action-btn {
+    width: 75px;
+    height: 75px;
+    border-radius: 50%;
+    border: 2px solid #00ffcc;
+    background: rgba(0, 255, 204, 0.25);
+    color: white;
+    font-weight: bold;
+    font-size: 0.75rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    transition: transform 0.1s, background 0.1s;
+}
+
+.action-btn:active:not(:disabled) {
+    transform: scale(0.92);
+    background: rgba(0, 255, 204, 0.5);
+}
+
+.action-btn:disabled {
+    border-color: #4a5d78;
+    background: rgba(42, 59, 85, 0.4);
+    color: #788fae;
+    cursor: not-allowed;
+}
+
+.secondary-btn {
+    border-color: #ffaa00;
+    background: rgba(255, 170, 0, 0.25);
+}
+
+.secondary-btn:active:not(:disabled) {
+    background: rgba(255, 170, 0, 0.5);
+}
+
+.secondary-btn:disabled {
+    border-color: #4a5d78;
+    background: rgba(42, 59, 85, 0.4);
+    color: #788fae;
 }
