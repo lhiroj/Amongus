@@ -1,0 +1,99 @@
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="theme-color" content="#090d1b">
+  <title>Uzay Ekibi</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="app">
+    <header class="topbar">
+      <div class="logo">✦ UZAY EKİBİ</div>
+      <span id="connection" class="status">Bağlantı bekleniyor</span>
+    </header>
+
+    <section id="menu" class="panel">
+      <h1>Uzay macerası</h1>
+      <p class="muted">Arkadaşlarını çağır, ekibini oluştur!</p>
+
+      <label for="playerName">Oyuncu adın</label>
+      <input id="playerName" maxlength="16" placeholder="Adını yaz">
+
+      <label for="playerColor">Karakter rengin</label>
+      <select id="playerColor">
+        <option value="#ff5c70">Kırmızı</option>
+        <option value="#36d8f5">Mavi</option>
+        <option value="#5be39b">Yeşil</option>
+        <option value="#ffcf56">Sarı</option>
+        <option value="#c59bff">Mor</option>
+        <option value="#ff9cdb">Pembe</option>
+      </select>
+
+      <button id="createRoom" class="primary">Yeni oda oluştur</button>
+
+      <div class="separator">VEYA</div>
+
+      <input id="roomCode" maxlength="6" placeholder="6 karakterli oda kodu">
+      <button id="joinRoom" class="secondary">Odaya katıl</button>
+
+      <p id="message" class="message"></p>
+    </section>
+
+    <section id="lobby" class="panel hidden">
+      <div class="lobby-heading">
+        <div>
+          <h2>Hazırlık odası</h2>
+          <p class="muted">Arkadaşlarınla bu kodu paylaş.</p>
+        </div>
+        <button id="leaveRoom" class="small-button">Ayrıl</button>
+      </div>
+
+      <div class="room-code-box">
+        <span id="displayCode">------</span>
+        <button id="copyCode" class="small-button">Kopyala</button>
+      </div>
+
+      <p id="playerCount" class="muted">Oyuncular: 0/4</p>
+      <div id="playerList" class="player-list"></div>
+      <button id="startGame" class="primary">Oyuna başla</button>
+      <p id="lobbyMessage" class="message"></p>
+    </section>
+
+    <section id="game" class="game-area hidden">
+      <div class="game-info">
+        <span id="gameRoom">ODA: ------</span>
+        <span id="gamePlayers">OYUNCU: 1/4</span>
+        <button id="backToLobby" class="small-button">Lobi</button>
+      </div>
+
+      <div class="canvas-wrap">
+        <canvas id="world" width="960" height="600">
+          Tarayıcın Canvas desteği sunmuyor.
+        </canvas>
+      </div>
+
+      <div class="mobile-controls">
+        <button data-dir="up" aria-label="Yukarı">▲</button>
+        <div class="horizontal-controls">
+          <button data-dir="left" aria-label="Sol">◀</button>
+          <button data-dir="down" aria-label="Aşağı">▼</button>
+          <button data-dir="right" aria-label="Sağ">▶</button>
+        </div>
+      </div>
+
+      <p class="hint">Bilgisayar: WASD veya ok tuşları · Tablet: yön tuşları</p>
+    </section>
+
+    <footer>UZAY EKİBİ · Arkadaşlarınla keşfet</footer>
+  </main>
+
+  <!-- Firebase SDK: uygulama kurulumu için internet gerekir. -->
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>
