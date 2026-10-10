@@ -1,86 +1,80 @@
+
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Space Impostors</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1,
+                 user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#080d18">
+  <title>SPACE IMPOSTORS</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Ana Menü Ekranı -->
-    <div id="main-menu" class="screen">
-        <div class="menu-content">
-            <h1 class="game-title">SPACE IMPOSTORS</h1>
-            <p class="game-subtitle">Tek Oyunculu Uzay Gemisi Macerası</p>
-            <div class="menu-buttons">
-                <button id="btn-play" class="btn primary">OYNA</button>
-                <button id="btn-how-to" class="btn secondary">NASIL OYNANIR</button>
-                <button id="btn-settings" class="btn secondary">AYARLAR</button>
-            </div>
-            <div class="version-tag">v0.1.0-alpha</div>
-        </div>
+  <main id="game">
+    <canvas id="canvas" aria-label="SPACE IMPOSTORS oyun alanı"></canvas>
+
+    <header id="hud">
+      <div class="brand">SPACE <span>IMPOSTORS</span></div>
+      <div class="hud-chip">GÜVERTE 01</div>
+      <button id="mapButton" class="small-button">HARİTA</button>
+    </header>
+
+    <div id="hint">Uzay gemisini keşfet!</div>
+
+    <section id="joystick" aria-label="Hareket joystick'i">
+      <div id="stick"></div>
+    </section>
+
+    <section id="actions">
+      <button id="interactButton" class="action-button" disabled>
+        <span>◎</span><small>KULLAN</small>
+      </button>
+      <button id="taskButton" class="action-button">
+        <span>▤</span><small>GÖREVLER</small>
+      </button>
+    </section>
+
+    <div id="mapOverlay" class="overlay hidden">
+      <div class="panel">
+        <button class="close-button" data-close="mapOverlay">✕</button>
+        <h2>GEMİ HARİTASI</h2>
+        <p>Bulunduğun konumu ve odaları incele.</p>
+        <div id="mapPreview"></div>
+      </div>
     </div>
 
-    <!-- Nasıl Oynanır Modalı -->
-    <div id="modal-how-to" class="modal hidden">
-        <div class="modal-content">
-            <h2>Nasıl Oynanır?</h2>
-            <p>Sol alttaki sanal joystick ile karakterini hareket ettir.</p>
-            <p>Sağ alttaki eylem butonlarını kullanarak görevleri yap, cesetleri rapor et ve toplantılar düzenle.</p>
-            <button id="close-how-to" class="btn primary">KAPAT</button>
-        </div>
+    <div id="taskOverlay" class="overlay hidden">
+      <div class="panel">
+        <button class="close-button" data-close="taskOverlay">✕</button>
+        <h2>GÖREV PANELİ</h2>
+        <p id="taskDescription">
+          Bir görev istasyonunun yakınına git ve KULLAN düğmesine bas.
+        </p>
+        <button id="closeTask" class="primary-button">ANLADIM</button>
+      </div>
     </div>
 
-    <!-- Ayarlar Modalı -->
-    <div id="modal-settings" class="modal hidden">
-        <div class="modal-content">
-            <h2>Ayarlar</h2>
-            <div class="setting-item">
-                <label>Oyuncu Adı:</label>
-                <input type="text" id="player-name-input" value="Kaptan" maxlength="10">
-            </div>
-            <div class="setting-item">
-                <label>Karakter Rengi:</label>
-                <select id="player-color-select">
-                    <option value="#ff0000">Kırmızı</option>
-                    <option value="#0051ff" selected>Mavi</option>
-                    <option value="#00ff22">Yeşil</option>
-                    <option value="#ffee00">Sarı</option>
-                    <option value="#9900ff">Mor</option>
-                    <option value="#ff7700">Turuncu</option>
-                </select>
-            </div>
-            <button id="close-settings" class="btn primary">KAYDET VE Kapat</button>
+    <div id="menu" class="screen">
+      <div class="menu-card">
+        <div class="logo-mark">✦</div>
+        <p class="eyebrow">UZAY GEMİSİNE HOŞ GELDİN</p>
+        <h1>SPACE<br><span>IMPOSTORS</span></h1>
+        <p class="subtitle">Güven. Görev. Hayatta kal.</p>
+        <button id="playButton" class="primary-button">OYUNA BAŞLA</button>
+        <button id="howButton" class="secondary-button">NASIL OYNANIR?</button>
+        <div id="instructions" class="instructions hidden">
+          Sol taraftaki joystick ile hareket et. Sarı görev
+          istasyonlarına yaklaşınca KULLAN düğmesini kullan.
+          HARİTA düğmesi oyunu duraklatır.
         </div>
+        <p class="version">PROTOTİP 0.1.0 · TEK OYUNCULU</p>
+      </div>
     </div>
 
-    <!-- Oyun Ekranı -->
-    <div id="game-container" class="screen hidden">
-        <canvas id="game-canvas"></canvas>
+    <div id="toast" class="toast hidden"></div>
+  </main>
 
-        <!-- Mobil Joystick (Sol Alt) -->
-        <div id="joystick-base">
-            <div id="joystick-stick"></div>
-        </div>
-
-        <!-- Sağ Alt Eylem Butonları -->
-        <div id="action-buttons">
-            <button id="btn-action" class="action-btn" disabled>KULLAN</button>
-            <button id="btn-report" class="action-btn secondary-btn" disabled>RAPOR</button>
-            <button id="btn-map" class="action-btn secondary-btn">HARİTA</button>
-        </div>
-
-        <!-- Üst Bilgi Çubuğu -->
-        <div id="hud-bar">
-            <div id="task-progress-container">
-                <span>Görev İlerlemesi:</span>
-                <div id="progress-bar-bg"><div id="progress-bar-fill"></div></div>
-                <span id="progress-text">%0</span>
-            </div>
-            <div id="player-hud-name">Kaptan</div>
-        </div>
-    </div>
-
-    <script src="game.js"></script>
+  <script src="game.js"></script>
 </body>
 </html>
