@@ -1,289 +1,340 @@
+
 * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    user-select: none;
-    -webkit-user-select: none;
-    -webkit-touch-callout: none;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
 }
 
-body, html {
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    background-color: #0b0e14;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    color: #ffffff;
-    touch-action: none;
+:root {
+  color-scheme: dark;
+  font-family: system-ui, Arial, sans-serif;
+  --cyan: #55e5f5;
+  --panel: rgba(13, 23, 40, 0.94);
 }
 
-.screen {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+html, body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #080d18;
+  color: white;
+  overscroll-behavior: none;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+button {
+  color: white;
+  font: inherit;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+#game {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  height: 100dvh;
+  overflow: hidden;
+  isolation: isolate;
+  background: #080d18;
+}
+
+#canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  touch-action: none;
+}
+
+#hud {
+  position: absolute;
+  z-index: 2;
+  top: max(12px, env(safe-area-inset-top));
+  left: 14px;
+  right: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  pointer-events: none;
+}
+
+.brand {
+  font-weight: 950;
+  font-size: clamp(12px, 3vw, 19px);
+  letter-spacing: 1px;
+  text-shadow: 0 0 18px #32b6d5;
+}
+
+.brand span {
+  color: var(--cyan);
+}
+
+.hud-chip, .small-button {
+  padding: 9px 12px;
+  border: 1px solid #31435b;
+  border-radius: 10px;
+  background: var(--panel);
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.hud-chip {
+  margin-left: auto;
+  color: #b5c8de;
+}
+
+.small-button {
+  pointer-events: auto;
+}
+
+#hint {
+  position: absolute;
+  z-index: 2;
+  top: 62px;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: 80%;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: rgba(7, 15, 27, 0.8);
+  color: #d4e5f3;
+  font-size: 12px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+#joystick {
+  position: absolute;
+  z-index: 3;
+  left: max(22px, env(safe-area-inset-left));
+  bottom: max(24px, env(safe-area-inset-bottom));
+  width: clamp(112px, 20vw, 150px);
+  height: clamp(112px, 20vw, 150px);
+  border: 2px solid rgba(118, 187, 220, 0.5);
+  border-radius: 50%;
+  background: rgba(13, 32, 52, 0.62);
+  box-shadow: inset 0 0 24px #153a58;
+  touch-action: none;
+}
+
+#stick {
+  position: absolute;
+  width: 43%;
+  height: 43%;
+  left: 28.5%;
+  top: 28.5%;
+  border: 2px solid #8aefff;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #3986ad, #164365);
+  box-shadow: 0 0 20px rgba(65, 215, 255, 0.4);
+  pointer-events: none;
+}
+
+#actions {
+  position: absolute;
+  z-index: 3;
+  right: max(16px, env(safe-area-inset-right));
+  bottom: max(25px, env(safe-area-inset-bottom));
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+.action-button {
+  width: clamp(70px, 13vw, 94px);
+  height: clamp(70px, 13vw, 94px);
+  border: 1px solid #405975;
+  border-radius: 22px;
+  background: rgba(14, 29, 48, 0.94);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+}
+
+.action-button span {
+  font-size: 27px;
+  color: var(--cyan);
+}
+
+.action-button small {
+  font-size: 10px;
+  font-weight: 900;
+}
+
+.action-button:disabled {
+  opacity: 0.4;
+}
+
+.primary-button, .secondary-button {
+  width: 100%;
+  min-height: 48px;
+  border-radius: 12px;
+  padding: 12px;
+  font-weight: 900;
+  letter-spacing: 1px;
+}
+
+.primary-button {
+  border: 1px solid #8ef5ff;
+  background: linear-gradient(120deg, #147b9b, #26bfd0);
+  box-shadow: 0 0 24px rgba(47, 207, 230, 0.17);
+}
+
+.secondary-button {
+  border: 1px solid #344c65;
+  background: #121e30;
+  margin-top: 10px;
+}
+
+.screen, .overlay {
+  position: absolute;
+  z-index: 5;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(3, 7, 15, 0.8);
+  backdrop-filter: blur(8px);
+  overflow: auto;
+}
+
+.menu-card, .panel {
+  position: relative;
+  width: min(100%, 390px);
+  padding: 26px;
+  border: 1px solid #2b536a;
+  border-radius: 22px;
+  background: linear-gradient(145deg, #132339, #0b1220);
+  box-shadow: 0 20px 70px #0009;
+}
+
+.menu-card {
+  text-align: center;
+}
+
+.logo-mark {
+  color: var(--cyan);
+  font-size: 38px;
+  text-shadow: 0 0 24px #35dfff;
+}
+
+.eyebrow {
+  color: #7dd7e8;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+h1 {
+  font-size: clamp(32px, 9vw, 48px);
+  line-height: 0.98;
+  letter-spacing: -2px;
+}
+
+h1 span {
+  color: var(--cyan);
+}
+
+.subtitle, .panel p {
+  color: #a6bad0;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.version {
+  color: #647990;
+  font-size: 10px;
+  margin-top: 20px;
+}
+
+.instructions {
+  margin-top: 14px;
+  padding: 12px;
+  border-radius: 10px;
+  background: #0a1524;
+  color: #c7d8e8;
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.panel h2 {
+  font-size: 20px;
+}
+
+.close-button {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 38px;
+  height: 38px;
+  border: 1px solid #354a62;
+  border-radius: 10px;
+  background: #101c2d;
+}
+
+#mapPreview {
+  width: 100%;
+  aspect-ratio: 1 / 0.8;
+  border: 1px solid #334b61;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #101b2a;
+}
+
+.toast {
+  position: absolute;
+  z-index: 8;
+  left: 50%;
+  bottom: 170px;
+  transform: translateX(-50%);
+  padding: 12px 16px;
+  border: 1px solid #45657c;
+  border-radius: 12px;
+  background: #101e30;
+  text-align: center;
+  font-size: 13px;
 }
 
 .hidden {
-    display: none !important;
+  display: none !important;
 }
 
-/* Ana Menü */
-#main-menu {
-    background: radial-gradient(circle at center, #1b2838 0%, #0b0e14 100%);
-    flex-direction: column;
-}
-
-.menu-content {
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    width: 90%;
-    max-width: 400px;
-    padding: 30px;
-    background: rgba(15, 22, 36, 0.85);
-    border: 2px solid #2a3b55;
-    border-radius: 16px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
-}
-
-.game-title {
-    font-size: 2.2rem;
-    color: #00ffcc;
-    letter-spacing: 2px;
-    text-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
-}
-
-.game-subtitle {
-    font-size: 0.95rem;
-    color: #8fa3bf;
-    margin-top: -10px;
-}
-
-.menu-buttons {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    margin-top: 15px;
-}
-
-.btn {
-    padding: 14px;
-    font-size: 1.1rem;
-    font-weight: bold;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: transform 0.1s, filter 0.1s;
-}
-
-.btn:active {
-    transform: scale(0.96);
-}
-
-.btn.primary {
-    background-color: #00ffcc;
-    color: #0b0e14;
-    box-shadow: 0 4px 15px rgba(0, 255, 204, 0.3);
-}
-
-.btn.secondary {
-    background-color: #2a3b55;
-    color: #ffffff;
-}
-
-.version-tag {
-    font-size: 0.8rem;
-    color: #576d8c;
-    margin-top: 10px;
-}
-
-/* Modallar */
-.modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.7);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 100;
-}
-
-.modal-content {
-    background: #131c2b;
-    padding: 25px;
-    border-radius: 12px;
-    border: 2px solid #3a5075;
-    width: 85%;
-    max-width: 450px;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.setting-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 1rem;
-}
-
-.setting-item input, .setting-item select {
-    padding: 8px;
-    border-radius: 6px;
-    border: 1px solid #3a5075;
-    background: #0b0e14;
-    color: white;
-    font-size: 1rem;
-    width: 60%;
-}
-
-/* Oyun Alanı */
-#game-container {
-    background-color: #000000;
-}
-
-#game-canvas {
-    display: block;
-    width: 100%;
-    height: 100%;
-}
-
-/* HUD ve Bilgi Çubuğu */
-#hud-bar {
-    position: absolute;
-    top: 15px;
-    left: 15px;
-    right: 15px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    pointer-events: none;
-    z-index: 10;
-}
-
-#task-progress-container {
-    background: rgba(15, 22, 36, 0.8);
-    padding: 8px 12px;
-    border-radius: 8px;
-    border: 1px solid #2a3b55;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 0.85rem;
-}
-
-#progress-bar-bg {
+@media (orientation: landscape) and (max-height: 500px) {
+  #joystick {
     width: 100px;
-    height: 10px;
-    background: #0b0e14;
-    border-radius: 5px;
-    overflow: hidden;
-    border: 1px solid #3a5075;
-}
+    height: 100px;
+    bottom: 12px;
+  }
 
-#progress-bar-fill {
-    width: 0%;
-    height: 100%;
-    background: #00ffcc;
-    transition: width 0.3s;
-}
+  #actions {
+    bottom: 12px;
+  }
 
-#player-hud-name {
-    background: rgba(15, 22, 36, 0.8);
-    padding: 8px 15px;
-    border-radius: 8px;
-    border: 1px solid #2a3b55;
-    font-weight: bold;
-    font-size: 0.95rem;
-}
+  .action-button {
+    width: 76px;
+    height: 76px;
+  }
 
-/* Sanal Joystick (Sol Alt) */
-#joystick-base {
-    position: absolute;
-    bottom: 30px;
-    left: 30px;
-    width: 120px;
-    height: 120px;
-    background: rgba(255, 255, 255, 0.08);
-    border: 2px solid rgba(255, 255, 255, 0.2);
-    border-radius: 50%;
-    touch-action: none;
-    z-index: 10;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
+  #hint {
+    top: 52px;
+  }
 
-#joystick-stick {
-    position: absolute;
-    width: 50px;
-    height: 50px;
-    background: rgba(0, 255, 204, 0.5);
-    border: 2px solid #00ffcc;
-    border-radius: 50%;
-    pointer-events: none;
-}
+  .menu-card {
+    padding: 16px 24px;
+  }
 
-/* Sağ Alt Eylem Butonları */
-#action-buttons {
-    position: absolute;
-    bottom: 30px;
-    right: 30px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    z-index: 10;
-}
+  .logo-mark {
+    font-size: 25px;
+  }
 
-.action-btn {
-    width: 75px;
-    height: 75px;
-    border-radius: 50%;
-    border: 2px solid #00ffcc;
-    background: rgba(0, 255, 204, 0.25);
-    color: white;
-    font-weight: bold;
-    font-size: 0.75rem;
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
-    transition: transform 0.1s, background 0.1s;
-}
-
-.action-btn:active:not(:disabled) {
-    transform: scale(0.92);
-    background: rgba(0, 255, 204, 0.5);
-}
-
-.action-btn:disabled {
-    border-color: #4a5d78;
-    background: rgba(42, 59, 85, 0.4);
-    color: #788fae;
-    cursor: not-allowed;
-}
-
-.secondary-btn {
-    border-color: #ffaa00;
-    background: rgba(255, 170, 0, 0.25);
-}
-
-.secondary-btn:active:not(:disabled) {
-    background: rgba(255, 170, 0, 0.5);
-}
-
-.secondary-btn:disabled {
-    border-color: #4a5d78;
-    background: rgba(42, 59, 85, 0.4);
-    color: #788fae;
+  h1 {
+    font-size: 30px;
+    margin: 8px 0;
+  }
 }
